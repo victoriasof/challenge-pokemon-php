@@ -39,3 +39,27 @@ PHP has very good documentation available on www.php.net. There is a nice trick 
 
 ## PHP the right way
 Another interesting read is https://phptherightway.com. This is not so much documentation over each separate function, but gives you more an overview of best practices and how different components work together.
+
+
+==========================================================
+
+Exercise
+
+Basic functionality that is expected (read: core features):
+
+    You can search a pokémon by name and by ID
+    Of said pokémon you need to show:
+        The ID-number
+        An image (sprite)
+        At least 4 "moves"
+        The previous evolution, only if it exists, along with their name and image. Be carefull, you cannot just do ID-1 to get the previous form, for example look into "magmar" - "magmortar". You have to use a seperate api call for this!
+
+
+There are a couple of pokemon that don't play with the normal rules, add code so their cases are also handled elegantly.
+
+    Ditto only has 1 move.
+    Eevee has 6 evolutions.
+
+
+
+
