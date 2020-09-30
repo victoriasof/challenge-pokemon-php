@@ -2,114 +2,97 @@
 
 declare(strict_types=1);
 
-ini_set('display_errors', "1"); //WITH INI_SET WE ACCESS PHP INI FILE
-ini_set('display_startup_errors', "1"); //WITH INI_SET WE ACCESS PHP INI FILE
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
-
-//$pokeName = $_GET["inputValue"];
-
-
-if (empty($_GET['pokeId'])){  //IF EMPTY DEFAULT IS BULBASAUR
-    $formData = file_get_contents('https://pokeapi.co/api/v2/pokemon/1');
-    $formDataSpecies = file_get_contents('https://pokeapi.co/api/v2/pokemon-species/1');
-}
-else {
-    $formData = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . $_GET['pokeId']);
-    $formDataSpecies = file_get_contents('https://pokeapi.co/api/v2/pokemon-species/' . $_GET['pokeId']);
-}
-
-$data = json_decode($formData, true); //associative arrays, so you can talk to indexes (instead objects)
-$dataSpecies =json_decode($formDataSpecies, true);
-
-
-$pokemonId = $data['id'];
-$pokeName = $data['name'];
-$pokeSprite = $data['sprites']['front_default']; //nested array
-
-
-
-
-for($i=0; $i<4; $i++){
-
-    $pokeMoves = $data['moves'][$i]['move']['name'];
-
-}
-
-
-$pokeType = $data['types'][0]['type']['name'];
-
-$test = $dataSpecies['evolves_from_species'];
-
-if(array_key_exists('name', $test)){
-
-$previousEvolution = $test['name'];
-
-}
-
-
-
-$prevEvImage = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . $previousEvolution);
-$previousImage =json_decode($prevEvImage, true);
-
-
-
-
-//function evolutions($data){
-    //do {
-    //}while();
-//}
-
-// function moves() {generate 4 random moves}
-
-
-//var_dump($data);
-
 ?>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-
-<section class = "input-field">
-    <form method ="get">
-        <input id="input" type="text" name="pokeId" placeholder="ID or Name">
-        <button id="button" type="submit" class="btn">Search</button>
+<header>
+    <form method="GET">
+        <input name="pokemonId" placeholder="ID or Name">
+        <button type="submit">Search</button>
     </form>
+</header>
 
-</section>
+<?php
 
-<!-- make pokemon information appear in browser using html and php tags -->
+$inputVal = $_GET['pokemonId'];
+$data = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . $inputVal);
+$dataArr = json_decode($data, true);
 
-<div>
-    # <?php echo($pokemonId); ?>
-    <?php echo($pokeName); ?>
+$pokeId = $dataArr['id'];
+$pokeName =$dataArr['name'];
+$pokeImage =$dataArr['sprites']['front_default'];
+$pokeMoves = $dataArr['moves'];
+
+$speciesUrl = $dataArr['species']['url'];
+$speciesDataArr = json_decode(file_get_contents($speciesUrl), true);
+
+$hasPrevEvolution = false;
+$previousEvolutionName = '';
+
+if(isset($speciesDataArr['evolves_from_species'])){
+    $previousEvolutionName = $speciesDataArr['evolves_from_species']['name'];
+    $hasPrevEvolution = true;
+
+    $prevEvolutionData = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . $previousEvolutionName);
+    $prevEvolutionDataArr = json_decode($prevEvolutionData, true);
+
+    $prevEvImage = $prevEvolutionDataArr['sprites']['front_default'];
+}
+?>
+
+<div id="main">
+    <div class="details">
+        <h2 class="name"><span class="id"># <?php echo $pokeId ?></span> <?php echo $pokeName ?> </h2>
+        <img src="<?php echo $pokeImage ?>" alt="<?php echo $pokeName ?>">
+        <?php/*
+    foreach ($pokeMoves as $move) {
+    */?>
+        <!--<p><?php //echo $move['move']['name']; ?></p>-->
+        <?php/*
+    }
+    */?>
+
+        <?php
+        foreach ($pokeMoves as $move) {
+            echo '<p>' . $move["move"]["name"] . '</p>';
+        }
+        ?>
+    </div>
+
+    <?php
+    //if ($hasPrevEvolution) {
+       // echo '<p>' . $previousEvolutionName . '</p>';
+       // echo '<img src="' . $prevEvImage . '">' . $previousEvolutionName . '</img>';
+    //}
+    ?>
+
+    <?php
+    if ($hasPrevEvolution) {
+    ?>
+    <div class="prev-evolution">
+        <p><?php echo $previousEvolutionName ?></p>
+        <img src="<?php echo $prevEvImage ?>" />
+    </div>
+    <?php
+    }
+
+    ?>
 
 </div>
 
-<img src = "<?php echo $pokeSprite ?>" />
 
-<div>
-    Type: <?php echo($pokeType); ?>
-</div>
-
-<div>
-    Moves: <?php echo($pokeMoves); ?>
-</div>
-
-
-<div>
-    Previous evolution: <?php echo($previousEvolution); ?>
-</div>
-
-<img src = "<?php echo $previousImage['sprites']['front_default']?>" />
 
 </body>
 </html>
