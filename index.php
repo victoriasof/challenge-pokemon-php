@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-ini_set('display_errors', "1");
-ini_set('display_startup_errors', "1");
+ini_set('display_errors', "1"); //WITH INI_SET WE ACCESS PHP INI FILE
+ini_set('display_startup_errors', "1"); //WITH INI_SET WE ACCESS PHP INI FILE
 error_reporting(E_ALL);
 
 //$pokeName = $_GET["inputValue"];
 
 
-if (empty($_GET['pokeId'])){
+if (empty($_GET['pokeId'])){  //IF EMPTY DEFAULT IS BULBASAUR
     $formData = file_get_contents('https://pokeapi.co/api/v2/pokemon/1');
     $formDataSpecies = file_get_contents('https://pokeapi.co/api/v2/pokemon-species/1');
 }
@@ -18,28 +18,26 @@ else {
     $formDataSpecies = file_get_contents('https://pokeapi.co/api/v2/pokemon-species/' . $_GET['pokeId']);
 }
 
-$data = json_decode($formData, true);
+$data = json_decode($formData, true); //associative arrays, so you can talk to indexes (instead objects)
 $dataSpecies =json_decode($formDataSpecies, true);
 
 
-$pokeDescription =
-    array(
-        $pokeOrder = $formData['order'],
-        $pokeName = $formData['name'],
-        $pokeSprite = $formData['sprites']['front_default'],
-        $pokeMoves = $formData['moves'][0]['move']['name'],
-        $pokeType = $formData['types'][0]['type']['name']
-    );
+$pokeOrder = $data['order'];
+$pokeName = $data['name'];
+$pokeSprite = $data['sprites']['front_default']; //nested array
+$pokeMoves = $data['moves'][0]['move']['name'];
+$pokeType = $data['types'][0]['type']['name'];
+
+$species = $dataSpecies['species'];
+$evolution = $dataSpecies['evolution_chain'];
 
 
-function getEvolutions($dataSpecies){
-    $species = $dataSpecies['species'];
-    $evolution = $dataSpecies['evolution_chain'];
+// function evolutions(){ do while }
 
-}
+// function moves() {generate 4 random moves}
 
 
-var_dump($data);
+//var_dump($data);
 
 ?>
 
@@ -63,16 +61,13 @@ var_dump($data);
 
 </section>
 
-
-<?php
-
+<!-- make pokemon information appear in browser using html and php tags -->
 
 
+<?php echo($pokeName); ?>
 
-echo($data["name"]);
+<img src = "<?php echo $pokeSprite ?>" />
 
-
-?>
 
 </body>
 </html>
