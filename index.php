@@ -22,17 +22,42 @@ $data = json_decode($formData, true); //associative arrays, so you can talk to i
 $dataSpecies =json_decode($formDataSpecies, true);
 
 
-$pokeOrder = $data['order'];
+$pokemonId = $data['id'];
 $pokeName = $data['name'];
 $pokeSprite = $data['sprites']['front_default']; //nested array
-$pokeMoves = $data['moves'][0]['move']['name'];
+
+
+
+
+for($i=0; $i<4; $i++){
+
+    $pokeMoves = $data['moves'][$i]['move']['name'];
+
+}
+
+
 $pokeType = $data['types'][0]['type']['name'];
 
-$species = $dataSpecies['species'];
-$evolution = $dataSpecies['evolution_chain'];
+$test = $dataSpecies['evolves_from_species'];
+
+if(array_key_exists('name', $test)){
+
+$previousEvolution = $test['name'];
+
+}
 
 
-// function evolutions(){ do while }
+
+$prevEvImage = file_get_contents('https://pokeapi.co/api/v2/pokemon/' . $previousEvolution);
+$previousImage =json_decode($prevEvImage, true);
+
+
+
+
+//function evolutions($data){
+    //do {
+    //}while();
+//}
 
 // function moves() {generate 4 random moves}
 
@@ -63,11 +88,28 @@ $evolution = $dataSpecies['evolution_chain'];
 
 <!-- make pokemon information appear in browser using html and php tags -->
 
+<div>
+    # <?php echo($pokemonId); ?>
+    <?php echo($pokeName); ?>
 
-<?php echo($pokeName); ?>
+</div>
 
 <img src = "<?php echo $pokeSprite ?>" />
 
+<div>
+    Type: <?php echo($pokeType); ?>
+</div>
+
+<div>
+    Moves: <?php echo($pokeMoves); ?>
+</div>
+
+
+<div>
+    Previous evolution: <?php echo($previousEvolution); ?>
+</div>
+
+<img src = "<?php echo $previousImage['sprites']['front_default']?>" />
 
 </body>
 </html>
