@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+header {
+    background-color: red;
+    padding: 10px 15px;
+}
+
+.details,
+.prev-evolution {
+    padding: 10px 15px;
+}
+
+#main {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.details {
+    width:70%;
+}
+
+.prev-evolution {
+    width: 30%;
+    text-align: center;
+}
+
+.alert-danger {
+    background-color: red;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
