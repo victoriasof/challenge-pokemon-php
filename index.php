@@ -13,7 +13,7 @@ error_reporting(E_ALL);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pokedex</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -84,11 +84,11 @@ if (isset($_GET['pokemonId']) && $_GET['pokemonId'] !== '') {
         }
         */?>
 
+            <p>Moves:</p>
             <?php
             /*foreach ($pokeMoves as $move) {
                 echo '<p>' . $move["move"]["name"] . '</p>';
             }*/
-
             foreach ($moves as $move) {
                 ?>
                 <p class="single-move"><?php echo $move ?></p>
@@ -108,7 +108,7 @@ if (isset($_GET['pokemonId']) && $_GET['pokemonId'] !== '') {
         if ($hasPrevEvolution) {
             ?>
             <div class="prev-evolution">
-                <p><?php echo $previousEvolutionName ?></p>
+                <p>Previous evolution: <?php echo $previousEvolutionName ?></p>
                 <img src="<?php echo $prevEvImage ?>" />
             </div>
             <?php
